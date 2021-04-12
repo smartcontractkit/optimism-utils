@@ -1,0 +1,25 @@
+{
+  "name": "@chainlink/optimism-utils",
+  "version": "0.0.1-alpha",
+  "main": "dist/index",
+  "files": [
+    "dist/index",
+    "scripts"
+  ],
+  "types": "dist/index",
+  "author": "Kristijan Rebernisak <kristijan.rebernisak@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "clean": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
+    "prepack": "yarn build",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@eth-optimism/contracts": "^0.2.0",
+    "ethers": "^5.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  }
+}
