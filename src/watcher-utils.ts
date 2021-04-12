@@ -1,12 +1,9 @@
 import { Contract, Transaction } from 'ethers'
-import { JsonRpcProvider, TransactionReceipt, TransactionResponse } from '@ethersproject/providers'
+import { TransactionReceipt, TransactionResponse } from '@ethersproject/providers'
+import { Provider } from '@ethersproject/abstract-provider'
 import { Watcher } from './watcher'
 
-export const initWatcher = async (
-  l1Provider: JsonRpcProvider,
-  l2Provider: JsonRpcProvider,
-  AddressManager: Contract,
-) => {
+export const initWatcher = async (l1Provider: Provider, l2Provider: Provider, AddressManager: Contract) => {
   const l1MessengerAddress = await AddressManager.getAddress('Proxy__OVM_L1CrossDomainMessenger')
   const l2MessengerAddress = await AddressManager.getAddress('OVM_L2CrossDomainMessenger')
   return new Watcher({

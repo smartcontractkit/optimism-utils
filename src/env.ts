@@ -1,7 +1,7 @@
 import { getContractFactory } from '@eth-optimism/contracts'
 import { Watcher } from './watcher'
-import { Contract, utils, Wallet } from 'ethers'
-import { getAddressManager, l1Provider, l2Provider, l1Wallet, l2Wallet, fundUser, getOvmEth, getGateway } from './utils'
+import { BigNumberish, Contract, Wallet } from 'ethers'
+import { getAddressManager, getOvmEth, getGateway, fundUser } from './utils'
 import { initWatcher, CrossDomainMessagePair, Direction, waitForXDomainTransaction } from './watcher-utils'
 import { TransactionResponse } from '@ethersproject/providers'
 
@@ -36,16 +36,10 @@ export class OptimismEnv {
     this.ctc = args.ctc
   }
 
-  static async new(): Promise<OptimismEnv> {
-    const addressManager = getAddressManager(l1Wallet)
-    const watcher = await initWatcher(l1Provider, l2Provider, addressManager)
+  static async new(addressManagerAddr: string, l1Wallet: Wallet, l2Wallet: Wallet): Promise<OptimismEnv> {
+    const addressManager = getAddressManager(addressManagerAddr, l1Wallet)
+    const watcher = await initWatcher(l1Wallet.provider, l2Wallet.provider, addressManager)
     const gateway = await getGateway(l1Wallet, addressManager)
-
-    // fund the user if needed
-    const balance = await l2Wallet.getBalance()
-    if (balance.isZero()) {
-      await fundUser(watcher, gateway, utils.parseEther('10'))
-    }
 
     const ovmEth = getOvmEth(l2Wallet)
     const l1Messenger = getContractFactory('iOVM_L1CrossDomainMessenger')
@@ -69,6 +63,14 @@ export class OptimismEnv {
       l1Wallet,
       l2Wallet,
     })
+  }
+
+  async fundL2(amount: BigNumberish, requireZeroBalance = true) {
+    // fund the user if needed
+    const balance = await this.l2Wallet.getBalance()
+    if (requireZeroBalance && balance.isZero()) {
+      await fundUser(this.watcher, this.gateway, this.l2Wallet.address, amount)
+    }
   }
 
   async waitForXDomainTransaction(

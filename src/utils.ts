@@ -1,36 +1,19 @@
-import { Contract, Wallet, constants, providers, BigNumberish, BigNumber } from 'ethers'
+import { Contract, Wallet, constants, BigNumberish, BigNumber } from 'ethers'
 import { getContractFactory, getContractInterface } from '@eth-optimism/contracts'
 import { Watcher } from './watcher'
 import { Direction, waitForXDomainTransaction } from './watcher-utils'
-
-export const GWEI = BigNumber.from(1e9)
-
-// The hardhat instance
-const l1HttpPort = 9545
-export const l1Provider = new providers.JsonRpcProvider(`http://localhost:${l1HttpPort}`)
-l1Provider.pollingInterval = 10
-
-const httpPort = 8545
-export const l2Provider = new providers.JsonRpcProvider(`http://localhost:${httpPort}`)
-l2Provider.pollingInterval = 10
-
-// The sequencer private key which is funded on L1
-export const l1Wallet = new Wallet('0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80', l1Provider)
-
-// A random private key which should always be funded with deposits from L1 -> L2
-// if it's using non-0 gas price
-export const l2Wallet = l1Wallet.connect(l2Provider)
 
 // Predeploys
 export const PROXY_SEQUENCER_ENTRYPOINT_ADDRESS = '0x4200000000000000000000000000000000000004'
 export const OVM_ETH_ADDRESS = '0x4200000000000000000000000000000000000006'
 
 // The address manager is always at the same address in testnet deployments
-export const addressManagerAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+export const LOCAL_ADDRESS_MANAGER_ADDR = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+export const KOVAN_ADDRESS_MANAGER_ADDR = '0xFaf27b24ba54C6910C12CFF5C9453C0e8D634e05'
+export const MAINNET_ADDRESS_MANAGER_ADDR = '0xd3EeD86464Ff13B4BFD81a3bB1e753b7ceBA3A39'
 
-export const getAddressManager = (provider: any) => {
-  return getContractFactory('Lib_AddressManager').connect(provider).attach(addressManagerAddress)
-}
+export const getAddressManager = (address: string, provider: any) =>
+  getContractFactory('Lib_AddressManager').connect(provider).attach(address)
 
 // Gets the gateway using the proxy if available
 export const getGateway = async (wallet: Wallet, AddressManager: Contract) => {
@@ -48,7 +31,12 @@ export const getGateway = async (wallet: Wallet, AddressManager: Contract) => {
 
 export const getOvmEth = (wallet: Wallet) => new Contract(OVM_ETH_ADDRESS, getContractInterface('OVM_ETH'), wallet)
 
-export const fundUser = async (watcher: Watcher, gateway: Contract, amount: BigNumberish, recipient?: string) => {
+export const fundUser = async (
+  watcher: Watcher,
+  gateway: Contract,
+  recipient: string | undefined,
+  amount: BigNumberish,
+) => {
   const value = BigNumber.from(amount)
   const tx = recipient ? gateway.depositTo(recipient, { value }) : gateway.deposit({ value })
   await waitForXDomainTransaction(watcher, tx, Direction.L1ToL2)
