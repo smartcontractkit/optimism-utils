@@ -1,9 +1,10 @@
 import { getContractFactory } from '@eth-optimism/contracts'
 import { Watcher } from './watcher'
 import { BigNumberish, Contract, Wallet } from 'ethers'
-import { getAddressManager, getOvmEth, getGateway, fundUser } from './utils'
+import { getAddressManager, getOvmEth, getGateway, depositL2, withdrawL1 } from './utils'
 import { initWatcher, CrossDomainMessagePair, Direction, waitForXDomainTransaction } from './watcher-utils'
 import { TransactionResponse } from '@ethersproject/providers'
+import { parseEther } from '@ethersproject/units'
 
 /// Helper class for instantiating a test environment with a funded account
 export class OptimismEnv {
@@ -65,11 +66,20 @@ export class OptimismEnv {
     })
   }
 
-  async fundL2(amount: BigNumberish, requireZeroBalance = true) {
+  async depositL2(amount: BigNumberish, requireBalance: BigNumberish = parseEther('1')) {
     // fund the user if needed
     const balance = await this.l2Wallet.getBalance()
-    if (requireZeroBalance && balance.isZero()) {
-      await fundUser(this.watcher, this.gateway, this.l2Wallet.address, amount)
+    if (balance.lt(requireBalance)) {
+      await depositL2(this.watcher, this.gateway, this.l2Wallet.address, amount)
+    }
+  }
+
+  // this will take a long time on networks other than local
+  async withdrawL1(amount: BigNumberish, requireBalance: BigNumberish = parseEther('1')) {
+    // fund the user if needed
+    const balance = await this.l1Wallet.getBalance()
+    if (balance.lt(requireBalance)) {
+      await withdrawL1(this.watcher, this.ovmEth, this.l1Wallet.address, amount)
     }
   }
 

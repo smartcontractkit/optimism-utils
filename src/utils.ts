@@ -31,7 +31,7 @@ export const getGateway = async (wallet: Wallet, AddressManager: Contract) => {
 
 export const getOvmEth = (wallet: Wallet) => new Contract(OVM_ETH_ADDRESS, getContractInterface('OVM_ETH'), wallet)
 
-export const fundUser = async (
+export const depositL2 = async (
   watcher: Watcher,
   gateway: Contract,
   recipient: string | undefined,
@@ -39,5 +39,16 @@ export const fundUser = async (
 ) => {
   const value = BigNumber.from(amount)
   const tx = recipient ? gateway.depositTo(recipient, { value }) : gateway.deposit({ value })
+  await waitForXDomainTransaction(watcher, tx, Direction.L1ToL2)
+}
+
+export const withdrawL1 = async (
+  watcher: Watcher,
+  gateway: Contract,
+  recipient: string | undefined,
+  amount: BigNumberish,
+) => {
+  const value = BigNumber.from(amount)
+  const tx = recipient ? gateway.withdrawTo(recipient, { value }) : gateway.withdraw({ value })
   await waitForXDomainTransaction(watcher, tx, Direction.L1ToL2)
 }

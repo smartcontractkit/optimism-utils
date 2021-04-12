@@ -14,7 +14,8 @@ export declare class OptimismEnv {
     l2Wallet: Wallet;
     constructor(args: any);
     static new(addressManagerAddr: string, l1Wallet: Wallet, l2Wallet: Wallet): Promise<OptimismEnv>;
-    fundL2(amount: BigNumberish, requireZeroBalance?: boolean): Promise<void>;
+    depositL2(amount: BigNumberish, requireBalance?: BigNumberish): Promise<void>;
+    withdrawL1(amount: BigNumberish, requireBalance?: BigNumberish): Promise<void>;
     waitForXDomainTransaction(tx: Promise<TransactionResponse> | TransactionResponse, direction: Direction): Promise<CrossDomainMessagePair>;
 }
 //# sourceMappingURL=env.d.ts.map

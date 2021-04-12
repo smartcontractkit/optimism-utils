@@ -8,5 +8,6 @@ export declare const MAINNET_ADDRESS_MANAGER_ADDR = "0xd3EeD86464Ff13B4BFD81a3bB
 export declare const getAddressManager: (address: string, provider: any) => any;
 export declare const getGateway: (wallet: Wallet, AddressManager: Contract) => Promise<Contract>;
 export declare const getOvmEth: (wallet: Wallet) => Contract;
-export declare const fundUser: (watcher: Watcher, gateway: Contract, recipient: string | undefined, amount: BigNumberish) => Promise<void>;
+export declare const depositL2: (watcher: Watcher, gateway: Contract, recipient: string | undefined, amount: BigNumberish) => Promise<void>;
+export declare const withdrawL1: (watcher: Watcher, gateway: Contract, recipient: string | undefined, amount: BigNumberish) => Promise<void>;
 //# sourceMappingURL=utils.d.ts.map
