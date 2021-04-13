@@ -1,7 +1,7 @@
 import { Contract, Transaction } from 'ethers';
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/providers';
 import { Provider } from '@ethersproject/abstract-provider';
-import { Watcher } from './watcher';
+import { Watcher } from '@eth-optimism/core-utils';
 export declare const initWatcher: (l1Provider: Provider, l2Provider: Provider, AddressManager: Contract) => Promise<Watcher>;
 export interface CrossDomainMessagePair {
     tx: Transaction;

@@ -1,5 +1,5 @@
 import { getContractFactory } from '@eth-optimism/contracts'
-import { Watcher } from './watcher'
+import { Watcher } from '@eth-optimism/core-utils'
 import { BigNumberish, Contract, Wallet } from 'ethers'
 import { getAddressManager, getOvmEth, getGateway, depositL2, withdrawL1 } from './utils'
 import { initWatcher, CrossDomainMessagePair, Direction, waitForXDomainTransaction } from './watcher-utils'

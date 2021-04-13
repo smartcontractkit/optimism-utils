@@ -1,7 +1,7 @@
 import { Contract, Transaction } from 'ethers'
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/providers'
 import { Provider } from '@ethersproject/abstract-provider'
-import { Watcher } from './watcher'
+import { Watcher } from '@eth-optimism/core-utils'
 
 export const initWatcher = async (l1Provider: Provider, l2Provider: Provider, AddressManager: Contract) => {
   const l1MessengerAddress = await AddressManager.getAddress('Proxy__OVM_L1CrossDomainMessenger')

@@ -1,6 +1,6 @@
 import { Contract, Wallet, constants, BigNumberish, BigNumber } from 'ethers'
 import { getContractFactory, getContractInterface } from '@eth-optimism/contracts'
-import { Watcher } from './watcher'
+import { Watcher } from '@eth-optimism/core-utils'
 import { Direction, waitForXDomainTransaction } from './watcher-utils'
 
 // Predeploys

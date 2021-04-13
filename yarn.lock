@@ -26,6 +26,16 @@
     ethers "^5.0.31"
     pino "^6.11.1"
 
+"@eth-optimism/core-utils@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@eth-optimism/core-utils/-/core-utils-0.2.1.tgz#95965ed76ec80c694d5b24375619b9b43ade6962"
+  integrity sha512-OYLb3mZ47yupGSLfPirbtu3N0od7qIk8sqSA5r+fdtNURHJCzl2dw25jNu3QhbtHePNGE7ACXTaT+YXoii/Uhg==
+  dependencies:
+    "@ethersproject/abstract-provider" "^5.0.9"
+    ethers "^5.0.31"
+    lodash "^4.17.21"
+    pino "^6.11.1"
+
 "@ethersproject/abi@5.0.0-beta.153":
   version "5.0.0-beta.153"
   resolved "https://registry.yarnpkg.com/@ethersproject/abi/-/abi-5.0.0-beta.153.tgz#43a37172b33794e4562999f6e2d555b7599a8eee"
@@ -3901,7 +3911,7 @@ lodash@4.17.20:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
-lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.20, lodash@^4.17.4:
+lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.4:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==

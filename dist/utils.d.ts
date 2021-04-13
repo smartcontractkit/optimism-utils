@@ -1,5 +1,5 @@
 import { Contract, Wallet, BigNumberish } from 'ethers';
-import { Watcher } from './watcher';
+import { Watcher } from '@eth-optimism/core-utils';
 export declare const PROXY_SEQUENCER_ENTRYPOINT_ADDRESS = "0x4200000000000000000000000000000000000004";
 export declare const OVM_ETH_ADDRESS = "0x4200000000000000000000000000000000000006";
 export declare const LOCAL_ADDRESS_MANAGER_ADDR = "0x5FbDB2315678afecb367f032d93F642f64180aa3";

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@eth-optimism/contracts": "^0.2.0",
+    "@eth-optimism/core-utils": "^0.2.1",
     "ethers": "^5.1.0"
   },
   "devDependencies": {

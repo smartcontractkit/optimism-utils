@@ -1,4 +1,4 @@
-import { Watcher } from './watcher';
+import { Watcher } from '@eth-optimism/core-utils';
 import { BigNumberish, Contract, Wallet } from 'ethers';
 import { CrossDomainMessagePair, Direction } from './watcher-utils';
 import { TransactionResponse } from '@ethersproject/providers';
