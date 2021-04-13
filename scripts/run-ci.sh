@@ -11,4 +11,5 @@ current_dir=$(dirname "$0")
 git clone https://github.com/ethereum-optimism/optimism.git
 cd optimism/ops
 build_images
-docker-compose up -d && ../../${current_dir}/wait-for-sequencer.sh
+docker-compose up -d
+../../${current_dir}/wait-for-sequencer.sh
