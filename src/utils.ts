@@ -49,6 +49,6 @@ export const withdrawL1 = async (
   amount: BigNumberish,
 ) => {
   const value = BigNumber.from(amount)
-  const tx = recipient ? gateway.withdrawTo(recipient, { value }) : gateway.withdraw({ value })
-  await waitForXDomainTransaction(watcher, tx, Direction.L1ToL2)
+  const tx = recipient ? gateway.withdrawTo(recipient, value) : gateway.withdraw(value)
+  await waitForXDomainTransaction(watcher, tx, Direction.L2ToL1)
 }
