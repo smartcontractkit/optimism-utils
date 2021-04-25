@@ -1,7 +1,8 @@
 import { Watcher } from '@eth-optimism/core-utils';
-import { BigNumberish, Contract, Wallet } from 'ethers';
+import { Contract, Wallet } from 'ethers';
 import { CrossDomainMessagePair, Direction } from './watcher-utils';
 import { TransactionResponse } from '@ethersproject/providers';
+import { BigNumberish } from '@ethersproject/bignumber';
 export declare class OptimismEnv {
     addressManager: Contract;
     gateway: Contract;
