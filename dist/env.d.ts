@@ -5,10 +5,11 @@ import { TransactionResponse } from '@ethersproject/providers';
 import { BigNumberish } from '@ethersproject/bignumber';
 export declare class OptimismEnv {
     addressManager: Contract;
-    gateway: Contract;
+    l1Bridge: Contract;
     l1Messenger: Contract;
     ctc: Contract;
     ovmEth: Contract;
+    l2Bridge: Contract;
     l2Messenger: Contract;
     watcher: Watcher;
     l1Wallet: Wallet;

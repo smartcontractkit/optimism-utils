@@ -1,5 +1,5 @@
-import { Contract, Wallet, constants, BigNumberish, BigNumber } from 'ethers'
-import { getContractFactory, getContractInterface } from '@eth-optimism/contracts'
+import { Contract, Wallet, constants, BigNumberish, BigNumber, utils } from 'ethers'
+import { getContractFactory, getContractInterface, predeploys } from '@eth-optimism/contracts'
 import { Watcher } from '@eth-optimism/core-utils'
 import { Direction, waitForXDomainTransaction } from './watcher-utils'
 
@@ -15,21 +15,31 @@ export const MAINNET_ADDRESS_MANAGER_ADDR = '0xd3EeD86464Ff13B4BFD81a3bB1e753b7c
 export const getAddressManager = (address: string, provider: any) =>
   getContractFactory('Lib_AddressManager').connect(provider).attach(address)
 
-// Gets the gateway using the proxy if available
-export const getGateway = async (wallet: Wallet, AddressManager: Contract) => {
-  const l1GatewayInterface = getContractInterface('OVM_L1ETHGateway')
-  const ProxyGatewayAddress = await AddressManager.getAddress('Proxy__OVM_L1ETHGateway')
-  const addressToUse =
-    ProxyGatewayAddress !== constants.AddressZero
-      ? ProxyGatewayAddress
-      : await AddressManager.getAddress('OVM_L1ETHGateway')
+// Gets the bridge contract
+export const getL1Bridge = async (wallet: Wallet, AddressManager: Contract) => {
+  const l1BridgeInterface = getContractInterface('OVM_L1StandardBridge')
+  const ProxyBridgeAddress = await AddressManager.getAddress('Proxy__OVM_L1StandardBridge')
 
-  const OVM_L1ETHGateway = new Contract(addressToUse, l1GatewayInterface, wallet)
+  if (!utils.isAddress(ProxyBridgeAddress) || ProxyBridgeAddress === constants.AddressZero) {
+    throw new Error('Proxy__OVM_L1StandardBridge not found')
+  }
 
-  return OVM_L1ETHGateway
+  const OVM_L1StandardBridge = new Contract(ProxyBridgeAddress, l1BridgeInterface, wallet)
+  return OVM_L1StandardBridge
 }
 
-export const getOvmEth = (wallet: Wallet) => new Contract(OVM_ETH_ADDRESS, getContractInterface('OVM_ETH'), wallet)
+export const getL2Bridge = async (wallet: Wallet) => {
+  const L2BridgeInterface = getContractInterface('OVM_L2StandardBridge')
+
+  const OVM_L2StandardBridge = new Contract(predeploys.OVM_L2StandardBridge, L2BridgeInterface, wallet)
+  return OVM_L2StandardBridge
+}
+
+export const getOvmEth = (wallet: Wallet) => {
+  const OVM_ETH = new Contract(OVM_ETH_ADDRESS, getContractInterface('OVM_ETH'), wallet)
+
+  return OVM_ETH
+}
 
 export const depositL2 = async (
   watcher: Watcher,
@@ -38,7 +48,9 @@ export const depositL2 = async (
   amount: BigNumberish,
 ) => {
   const value = BigNumber.from(amount)
-  const tx = recipient ? gateway.depositTo(recipient, { value }) : gateway.deposit({ value })
+  const tx = recipient
+    ? gateway.depositETHTo(recipient, 1_300_000, '0x', { value })
+    : gateway.depositETH(1_300_000, '0x', { value })
   await waitForXDomainTransaction(watcher, tx, Direction.L1ToL2)
 }
 
@@ -49,6 +61,6 @@ export const withdrawL1 = async (
   amount: BigNumberish,
 ) => {
   const value = BigNumber.from(amount)
-  const tx = recipient ? gateway.withdrawTo(recipient, value) : gateway.withdraw(value)
+  const tx = recipient ? gateway.withdrawTo(recipient, value, 300_000, '') : gateway.withdraw(value, 300_000, '')
   await waitForXDomainTransaction(watcher, tx, Direction.L2ToL1)
 }
